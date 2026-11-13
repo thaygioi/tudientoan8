@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<title>Từ điển Toán 8 – Anh/Việt</title>
+<style>
+:root{
+  --bg:#f5f6fb;--card:#ffffff;--ink:#141a2e;--muted:#6b7390;--line:#e7e9f3;
+  --brand:#4f46e5;--brand2:#7c3aed;--soft:#eef0ff;--acc:#f59e0b;
+  --shadow:0 1px 2px rgba(20,26,46,.05),0 6px 20px -8px rgba(20,26,46,.12);
+  --r:18px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0e1120;--card:#171b2e;--ink:#eef0fa;--muted:#9aa2c0;--line:#262b45;--soft:#22264a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -10px rgba(0,0,0,.6);
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body.big{font-size:20px}
+button{font:inherit;cursor:pointer;color:inherit}
+svg{display:block}
+
+/* Header */
+header{position:sticky;top:0;z-index:5;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;
+  padding:14px 16px 16px;padding-top:calc(14px + env(safe-area-inset-top));border-radius:0 0 24px 24px;box-shadow:0 10px 30px -14px rgba(79,70,229,.7)}
+.top{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto}
+.logo{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:1.3em;flex:0 0 auto}
+.ttl{flex:1;min-width:0}
+.ttl h1{font-size:1.08em;margin:0;font-weight:800;letter-spacing:-.01em}
+.ttl p{margin:0;font-size:.78em;opacity:.82}
+.iconbtn{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:12px;height:40px;min-width:44px;padding:0 10px;font-weight:800;font-size:.9em}
+.iconbtn:active{transform:scale(.95)}
+.search{margin:14px auto 0;position:relative;max-width:900px}
+.search .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#8a8fb0;pointer-events:none}
+.search input{width:100%;border:0;border-radius:16px;padding:14px 46px 14px 44px;font-size:1em;outline:none;background:#fff;color:#141a2e;box-shadow:0 4px 14px -6px rgba(0,0,0,.25)}
+.search input::placeholder{color:#9aa0bd}
+.search .clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef0f7;color:#555b78;width:30px;height:30px;border-radius:50%;display:none;font-size:1.1em;line-height:1}
+
+/* Topic chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 10px;scrollbar-width:none;position:sticky;z-index:4;background:var(--bg);max-width:900px;margin:0 auto}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px 8px 10px;font-size:.88em;color:var(--muted);font-weight:650;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:.15s}
+.chip .e{font-size:1.05em}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+
+main{padding:4px 14px calc(100px + env(safe-area-inset-bottom));max-width:900px;margin:0 auto}
+.count{font-size:.82em;color:var(--muted);margin:2px 4px 6px}
+.group{display:flex;align-items:center;gap:10px;margin:20px 4px 10px;font-weight:800;font-size:.95em}
+.group .gi{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:1.05em;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.group .gn{margin-left:auto;font-size:.78em;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:2px 9px;border-radius:999px}
+.list{display:grid;gap:10px}
+@media (min-width:760px){.list{grid-template-columns:1fr 1fr}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--c,var(--brand))}
+.row{display:flex;align-items:flex-start;gap:6px}
+.en{font-weight:800;font-size:1.1em;flex:1;letter-spacing:-.01em;word-break:break-word}
+.vi{color:var(--muted);margin-top:2px;font-weight:500}
+.ex{margin-top:10px;padding:9px 12px;background:var(--soft);border-radius:12px;font-size:.92em}
+.ex .v{color:var(--muted);font-size:.95em;margin-top:2px}
+.act{border:0;background:transparent;color:var(--muted);width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;margin-top:-6px}
+.act:active{background:var(--soft)}
+.star.on{color:var(--acc)}
+.star.on svg{fill:currentColor}
+.sent .en{font-weight:700;font-size:1.03em}
+.empty{text-align:center;color:var(--muted);padding:48px 16px}
+.empty .big{font-size:2.4em;margin-bottom:6px}
+mark{background:#fde68a;color:#141a2e;padding:0 2px;border-radius:4px}
+
+/* Bottom nav */
+nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;background:color-mix(in srgb,var(--card) 88%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;display:flex;padding:6px;z-index:6;box-shadow:0 12px 30px -12px rgba(20,26,46,.35)}
+nav button{flex:1;border:0;background:none;padding:7px 2px 6px;font-size:.74em;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:16px;transition:.15s}
+nav button svg{width:22px;height:22px}
+nav button.on{color:var(--brand);background:var(--soft)}
+.panel{display:none}.panel.on{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* AI */
+.ai .card::before{display:none}
+.ai h2{margin:0;font-size:1.1em}
+.ai textarea,.ai input{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;background:var(--bg);color:var(--ink);outline:none}
+.ai textarea:focus,.ai input:focus{border-color:var(--brand)}
+.ai textarea{min-height:96px;resize:vertical}
+.btn{border:0;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:14px;padding:13px 16px;font-weight:800;width:100%;margin-top:12px}
+.btn:disabled{opacity:.6}
+.btn.ghost{background:var(--soft);color:var(--brand)}
+.note{font-size:.85em;color:var(--muted)}
+.answer{white-space:pre-wrap;word-wrap:break-word}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.quick button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;font-size:.82em;color:var(--muted);text-align:left}
+details summary{cursor:pointer;font-weight:800;list-style:none}
+details summary::-webkit-details-marker{display:none}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:.88em;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="logo">📐</div>
+    <div class="ttl"><h1>Từ điển Toán 8</h1><p>Anh – Việt · dành cho giáo viên</p></div>
+    <button class="iconbtn" id="sizeBtn" title="Phóng to chữ">A+</button>
+  </div>
+  <div class="search">
+    <svg class="si" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="text" enterkeyhint="search" placeholder="Tìm tiếng Việt hoặc tiếng Anh…" autocomplete="off">
+    <button class="clear" id="clr" aria-label="Xóa">×</button>
+  </div>
+</header>
+
+<div class="chips" id="chips"></div>
+
+<main>
+  <section class="panel on" id="p-words"><div class="count" id="cw"></div><div id="words"></div></section>
+  <section class="panel" id="p-sents"><div class="count" id="cs"></div><div id="sents"></div></section>
+  <section class="panel" id="p-fav"><div id="favs"></div></section>
+  <section class="panel ai" id="p-ai">
+    <div class="card">
+      <h2>✨ Hỏi AI (Gemini)</h2>
+      <div class="note" style="margin-top:4px">Dùng khi cần từ/câu không có sẵn trong app. Phần Từ vựng và Mẫu câu luôn dùng được mà không cần mạng hay API.</div>
+      <textarea id="aiQ" style="margin-top:10px" placeholder="VD: Nói 'Hãy chứng minh tứ giác ABCD là hình bình hành' bằng tiếng Anh thế nào?"></textarea>
+      <div class="quick" id="quick"></div>
+      <button class="btn" id="aiGo">Hỏi Gemini</button>
+    </div>
+    <div class="card" id="aiOut" style="display:none"><div class="answer" id="aiAns"></div></div>
+    <div class="card">
+      <details id="keyBox">
+        <summary>⚙️ Cài đặt API key</summary>
+        <div class="note" style="margin:8px 0">Lấy key miễn phí tại aistudio.google.com → “Get API key”. Key chỉ lưu trên máy này.</div>
+        <input id="key" type="password" placeholder="Dán Gemini API key">
+        <input id="model" style="margin-top:8px" placeholder="Model" value="gemini-2.5-flash">
+        <button class="btn ghost" id="saveKey">Lưu</button>
+      </details>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button class="on" data-p="words"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6M9 11h4"/></svg>Từ vựng</button>
+  <button data-p="sents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Mẫu câu</button>
+  <button data-p="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>Đã lưu</button>
+  <button data-p="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>Hỏi AI</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== DỮ LIỆU TỪ VỰNG: [tiếng Anh, tiếng Việt, ví dụ EN, ví dụ VI] ===== */
+const WORDS = {
+"Đa thức": [
+["monomial","đơn thức","3x²y is a monomial.","3x²y là một đơn thức."],
+["polynomial","đa thức","x² + 2x − 1 is a polynomial.","x² + 2x − 1 là một đa thức."],
+["term","hạng tử","This polynomial has three terms.","Đa thức này có ba hạng tử."],
+["like terms","đơn thức đồng dạng","Collect the like terms.","Thu gọn các đơn thức đồng dạng."],
+["coefficient","hệ số","The coefficient of x² is 5.","Hệ số của x² là 5."],
+["variable","biến","x and y are variables.","x và y là các biến."],
+["constant","hằng số","−7 is the constant term.","−7 là hạng tử tự do (hằng số)."],
+["degree","bậc","The degree of the polynomial is 3.","Bậc của đa thức là 3."],
+["expression","biểu thức","Simplify the expression.","Rút gọn biểu thức."],
+["algebraic expression","biểu thức đại số","Write an algebraic expression.","Viết một biểu thức đại số."],
+["sum","tổng","Find the sum of A and B.","Tìm tổng của A và B."],
+["difference","hiệu","Find the difference A − B.","Tìm hiệu A − B."],
+["product","tích","The product of 2x and 3y is 6xy.","Tích của 2x và 3y là 6xy."],
+["quotient","thương","Find the quotient.","Tìm thương."],
+["remainder","số dư","The remainder is 0.","Số dư bằng 0."],
+["simplify","rút gọn / thu gọn","Simplify 2x + 3x.","Thu gọn 2x + 3x."],
+["expand","khai triển","Expand (x + 2)(x − 3).","Khai triển (x + 2)(x − 3)."],
+["evaluate","tính giá trị","Evaluate the expression at x = 2.","Tính giá trị biểu thức tại x = 2."],
+["divisible","chia hết","A is divisible by B.","A chia hết cho B."],
+["exponent / power","số mũ / lũy thừa","x³ is x to the power of 3.","x³ là x mũ 3."]
+],
+"Hằng đẳng thức": [
+["identity","hằng đẳng thức","Use the identity (a + b)² = a² + 2ab + b².","Dùng hằng đẳng thức (a + b)² = a² + 2ab + b²."],
+["square of a sum","bình phương của một tổng","(a + b)² is the square of a sum.","(a + b)² là bình phương của một tổng."],
+["square of a difference","bình phương của một hiệu","(a − b)² is the square of a difference.","(a − b)² là bình phương của một hiệu."],
+["difference of two squares","hiệu hai bình phương","a² − b² = (a − b)(a + b).","a² − b² = (a − b)(a + b)."],
+["cube of a sum","lập phương của một tổng","(a + b)³ is the cube of a sum.","(a + b)³ là lập phương của một tổng."],
+["cube of a difference","lập phương của một hiệu","(a − b)³ is the cube of a difference.","(a − b)³ là lập phương của một hiệu."],
+["sum of two cubes","tổng hai lập phương","a³ + b³ is a sum of two cubes.","a³ + b³ là tổng hai lập phương."],
+["difference of two cubes","hiệu hai lập phương","a³ − b³ is a difference of two cubes.","a³ − b³ là hiệu hai lập phương."],
+["factorize / factor","phân tích thành nhân tử","Factorize x² − 9.","Phân tích x² − 9 thành nhân tử."],
+["common factor","nhân tử chung","Take out the common factor.","Đặt nhân tử chung ra ngoài."],
+["grouping","nhóm hạng tử","Factorize by grouping.","Phân tích bằng cách nhóm hạng tử."],
+["square","bình phương","x² is read “x squared”.","x² đọc là “x bình phương”."],
+["cube","lập phương","x³ is read “x cubed”.","x³ đọc là “x lập phương”."]
+],
+"Phân thức": [
+["algebraic fraction","phân thức đại số","(x + 1)/(x − 2) is an algebraic fraction.","(x + 1)/(x − 2) là một phân thức đại số."],
+["numerator","tử thức (tử số)","The numerator is x + 1.","Tử thức là x + 1."],
+["denominator","mẫu thức (mẫu số)","The denominator must not be zero.","Mẫu thức phải khác 0."],
+["condition for the fraction to be defined","điều kiện xác định","The fraction is defined when x ≠ 2.","Phân thức xác định khi x ≠ 2."],
+["equal fractions","hai phân thức bằng nhau","Show that the two fractions are equal.","Chứng tỏ hai phân thức bằng nhau."],
+["reduce / simplify a fraction","rút gọn phân thức","Reduce the fraction to lowest terms.","Rút gọn phân thức đến tối giản."],
+["common denominator","mẫu thức chung","Find the common denominator.","Tìm mẫu thức chung."],
+["reciprocal","phân thức nghịch đảo","The reciprocal of x/2 is 2/x.","Nghịch đảo của x/2 là 2/x."],
+["opposite","phân thức đối","The opposite of A/B is −A/B.","Phân thức đối của A/B là −A/B."],
+["undefined","không xác định","The fraction is undefined at x = 2.","Phân thức không xác định tại x = 2."]
+],
+"Phương trình": [
+["equation","phương trình","Solve the equation 2x + 3 = 7.","Giải phương trình 2x + 3 = 7."],
+["linear equation in one variable","phương trình bậc nhất một ẩn","2x + 3 = 0 is a linear equation in one variable.","2x + 3 = 0 là phương trình bậc nhất một ẩn."],
+["unknown","ẩn (số)","x is the unknown.","x là ẩn."],
+["solve","giải","Solve for x.","Giải tìm x."],
+["solution","nghiệm","x = 2 is the solution of the equation.","x = 2 là nghiệm của phương trình."],
+["left-hand side","vế trái","Simplify the left-hand side.","Thu gọn vế trái."],
+["right-hand side","vế phải","The right-hand side equals 7.","Vế phải bằng 7."],
+["move a term to the other side","chuyển vế","Move 3 to the other side and change its sign.","Chuyển 3 sang vế kia và đổi dấu."],
+["check","thử lại / kiểm tra","Check your answer.","Kiểm tra lại đáp án."],
+["word problem","bài toán có lời văn","Solve the word problem by setting up an equation.","Giải bài toán bằng cách lập phương trình."],
+["set up an equation","lập phương trình","Let x be the number of students. Set up an equation.","Gọi x là số học sinh. Lập phương trình."],
+["condition","điều kiện","Condition: x is a positive integer.","Điều kiện: x là số nguyên dương."]
+],
+"Hàm số & đồ thị": [
+["function","hàm số","y = 2x + 1 is a function.","y = 2x + 1 là một hàm số."],
+["linear function","hàm số bậc nhất","y = ax + b (a ≠ 0) is a linear function.","y = ax + b (a ≠ 0) là hàm số bậc nhất."],
+["graph","đồ thị","Draw the graph of y = 2x.","Vẽ đồ thị hàm số y = 2x."],
+["coordinate plane","mặt phẳng tọa độ","Draw the coordinate plane Oxy.","Vẽ mặt phẳng tọa độ Oxy."],
+["x-axis","trục hoành","The point lies on the x-axis.","Điểm nằm trên trục hoành."],
+["y-axis","trục tung","The graph cuts the y-axis at (0; 1).","Đồ thị cắt trục tung tại (0; 1)."],
+["origin","gốc tọa độ","O is the origin.","O là gốc tọa độ."],
+["coordinates","tọa độ","Find the coordinates of point A.","Tìm tọa độ điểm A."],
+["slope","hệ số góc","The slope of y = 3x − 1 is 3.","Hệ số góc của y = 3x − 1 là 3."],
+["y-intercept","tung độ gốc","The y-intercept is −1.","Tung độ gốc là −1."],
+["straight line","đường thẳng","The graph is a straight line.","Đồ thị là một đường thẳng."],
+["parallel lines","hai đường thẳng song song","The two lines are parallel.","Hai đường thẳng song song."],
+["intersecting lines","hai đường thẳng cắt nhau","Find the intersection point of the two lines.","Tìm giao điểm của hai đường thẳng."],
+["value of the function","giá trị của hàm số","Find f(2).","Tính f(2)."]
+],
+"Tứ giác": [
+["quadrilateral","tứ giác","ABCD is a quadrilateral.","ABCD là một tứ giác."],
+["convex quadrilateral","tứ giác lồi","The sum of the angles of a convex quadrilateral is 360°.","Tổng các góc của tứ giác lồi là 360°."],
+["trapezoid (US) / trapezium (UK)","hình thang","ABCD is a trapezoid with AB ∥ CD.","ABCD là hình thang có AB ∥ CD."],
+["isosceles trapezoid","hình thang cân","An isosceles trapezoid has equal diagonals.","Hình thang cân có hai đường chéo bằng nhau."],
+["parallelogram","hình bình hành","Prove that ABCD is a parallelogram.","Chứng minh ABCD là hình bình hành."],
+["rectangle","hình chữ nhật","A rectangle has four right angles.","Hình chữ nhật có bốn góc vuông."],
+["rhombus","hình thoi","A rhombus has four equal sides.","Hình thoi có bốn cạnh bằng nhau."],
+["square","hình vuông","A square is both a rectangle and a rhombus.","Hình vuông vừa là hình chữ nhật vừa là hình thoi."],
+["side","cạnh","AB is a side of the quadrilateral.","AB là một cạnh của tứ giác."],
+["vertex (pl. vertices)","đỉnh","A, B, C, D are the vertices.","A, B, C, D là các đỉnh."],
+["diagonal","đường chéo","The diagonals bisect each other.","Hai đường chéo cắt nhau tại trung điểm mỗi đường."],
+["opposite sides","cạnh đối","Opposite sides are parallel.","Các cạnh đối song song."],
+["adjacent sides","cạnh kề","Two adjacent sides are equal.","Hai cạnh kề bằng nhau."],
+["opposite angles","góc đối","Opposite angles are equal.","Các góc đối bằng nhau."],
+["base","đáy","AB and CD are the bases of the trapezoid.","AB và CD là hai đáy của hình thang."],
+["parallel","song song","AB is parallel to CD.","AB song song với CD."],
+["perpendicular","vuông góc","AC is perpendicular to BD.","AC vuông góc với BD."],
+["axis of symmetry","trục đối xứng","A square has four axes of symmetry.","Hình vuông có bốn trục đối xứng."],
+["centre of symmetry","tâm đối xứng","O is the centre of symmetry.","O là tâm đối xứng."]
+],
+"Định lí Thalès & tam giác": [
+["Thales's theorem","định lí Thalès","Apply Thales's theorem.","Áp dụng định lí Thalès."],
+["converse","định lí đảo","Use the converse of Thales's theorem.","Dùng định lí Thalès đảo."],
+["ratio","tỉ số","The ratio of AB to CD is 2 : 3.","Tỉ số của AB và CD là 2 : 3."],
+["proportional segments","đoạn thẳng tỉ lệ","AB and CD are proportional to A'B' and C'D'.","AB, CD tỉ lệ với A'B', C'D'."],
+["midline / midsegment","đường trung bình","MN is the midline of triangle ABC.","MN là đường trung bình của tam giác ABC."],
+["midpoint","trung điểm","M is the midpoint of AB.","M là trung điểm của AB."],
+["angle bisector","đường phân giác","AD is the angle bisector of angle A.","AD là phân giác của góc A."],
+["similar triangles","tam giác đồng dạng","Triangle ABC is similar to triangle DEF.","Tam giác ABC đồng dạng với tam giác DEF."],
+["similarity ratio / scale factor","tỉ số đồng dạng","The similarity ratio is k = 2.","Tỉ số đồng dạng là k = 2."],
+["corresponding angles","góc tương ứng","Corresponding angles are equal.","Các góc tương ứng bằng nhau."],
+["corresponding sides","cạnh tương ứng","Corresponding sides are proportional.","Các cạnh tương ứng tỉ lệ."],
+["right triangle","tam giác vuông","ABC is a right triangle at A.","ABC là tam giác vuông tại A."],
+["hypotenuse","cạnh huyền","BC is the hypotenuse.","BC là cạnh huyền."],
+["leg","cạnh góc vuông","AB and AC are the legs.","AB và AC là hai cạnh góc vuông."],
+["Pythagorean theorem","định lí Pythagore","By the Pythagorean theorem, BC² = AB² + AC².","Theo định lí Pythagore, BC² = AB² + AC²."],
+["isosceles triangle","tam giác cân","ABC is an isosceles triangle at A.","ABC là tam giác cân tại A."],
+["equilateral triangle","tam giác đều","All sides of an equilateral triangle are equal.","Tam giác đều có ba cạnh bằng nhau."],
+["altitude / height","đường cao","AH is the altitude of triangle ABC.","AH là đường cao của tam giác ABC."],
+["median","đường trung tuyến","AM is the median.","AM là đường trung tuyến."],
+["prove","chứng minh","Prove that AB = CD.","Chứng minh AB = CD."],
+["given","giả thiết (cho)","Given: AB = AC.","Giả thiết: AB = AC."],
+["conclusion","kết luận","Write the given and the conclusion.","Ghi giả thiết và kết luận."]
+],
+"Hình chóp": [
+["regular triangular pyramid","hình chóp tam giác đều","S.ABC is a regular triangular pyramid.","S.ABC là hình chóp tam giác đều."],
+["regular square pyramid","hình chóp tứ giác đều","S.ABCD is a regular square pyramid.","S.ABCD là hình chóp tứ giác đều."],
+["apex","đỉnh (của hình chóp)","S is the apex.","S là đỉnh của hình chóp."],
+["base","mặt đáy","The base is a square.","Mặt đáy là hình vuông."],
+["lateral face","mặt bên","Each lateral face is an isosceles triangle.","Mỗi mặt bên là một tam giác cân."],
+["lateral edge","cạnh bên","SA is a lateral edge.","SA là một cạnh bên."],
+["base edge","cạnh đáy","The base edge is 6 cm.","Cạnh đáy dài 6 cm."],
+["slant height","trung đoạn","The slant height is 5 cm.","Trung đoạn dài 5 cm."],
+["height","chiều cao","SO is the height of the pyramid.","SO là chiều cao của hình chóp."],
+["lateral surface area","diện tích xung quanh","Calculate the lateral surface area.","Tính diện tích xung quanh."],
+["total surface area","diện tích toàn phần","Find the total surface area.","Tìm diện tích toàn phần."],
+["volume","thể tích","V = 1/3 × base area × height.","V = 1/3 × diện tích đáy × chiều cao."],
+["perimeter","chu vi","Find the perimeter of the base.","Tìm chu vi đáy."],
+["area","diện tích","The area of the base is 36 cm².","Diện tích đáy là 36 cm²."]
+],
+"Thống kê & xác suất": [
+["data","dữ liệu","Collect data about your class.","Thu thập dữ liệu về lớp em."],
+["collect","thu thập","Collect and classify the data.","Thu thập và phân loại dữ liệu."],
+["classify","phân loại","Classify the data into groups.","Phân loại dữ liệu thành các nhóm."],
+["survey","khảo sát / điều tra","We did a survey of 40 students.","Chúng tôi khảo sát 40 học sinh."],
+["table","bảng","Present the data in a table.","Biểu diễn dữ liệu bằng bảng."],
+["bar chart / column chart","biểu đồ cột","Draw a bar chart.","Vẽ biểu đồ cột."],
+["double bar chart","biểu đồ cột kép","Compare using a double bar chart.","So sánh bằng biểu đồ cột kép."],
+["pie chart","biểu đồ hình quạt tròn","The pie chart shows the percentages.","Biểu đồ quạt tròn cho biết các tỉ lệ phần trăm."],
+["line graph","biểu đồ đoạn thẳng","The line graph shows the temperature.","Biểu đồ đoạn thẳng cho biết nhiệt độ."],
+["percentage","tỉ lệ phần trăm","What percentage of students like football?","Bao nhiêu phần trăm học sinh thích bóng đá?"],
+["random","ngẫu nhiên","Pick a ball at random.","Lấy ngẫu nhiên một quả bóng."],
+["outcome","kết quả có thể","There are 6 possible outcomes.","Có 6 kết quả có thể."],
+["equally likely","đồng khả năng","The outcomes are equally likely.","Các kết quả là đồng khả năng."],
+["event","biến cố","Event A: “the number is even”.","Biến cố A: “số chấm là số chẵn”."],
+["favourable outcome","kết quả thuận lợi","There are 3 favourable outcomes for A.","Có 3 kết quả thuận lợi cho A."],
+["probability","xác suất","The probability of A is 1/2.","Xác suất của biến cố A là 1/2."],
+["experimental probability","xác suất thực nghiệm","Find the experimental probability.","Tính xác suất thực nghiệm."],
+["trial","lần thử / phép thử","Toss the coin 50 times (50 trials).","Tung đồng xu 50 lần."],
+["dice / die","xúc xắc","Roll a die.","Gieo một con xúc xắc."],
+["coin","đồng xu","Toss a coin.","Tung một đồng xu."]
+]
+};
+
+/* ===== MẪU CÂU: [tiếng Anh, tiếng Việt] ===== */
+const SENTS = {
+"Bắt đầu – kết thúc giờ học": [
+["Good morning, class!","Chào cả lớp!"],
+["Please sit down.","Mời các em ngồi."],
+["Who is absent today?","Hôm nay ai vắng?"],
+["Open your books to page 25.","Mở sách trang 25."],
+["Today we are going to learn about …","Hôm nay chúng ta sẽ học về …"],
+["Let's review the last lesson.","Chúng ta cùng ôn lại bài cũ."],
+["That's all for today.","Hôm nay đến đây là hết."],
+["Your homework is exercises 3 and 4 on page 30.","Bài tập về nhà là bài 3 và 4 trang 30."],
+["See you next lesson!","Hẹn gặp lại tiết sau!"]
+],
+"Ra yêu cầu – chỉ dẫn": [
+["Look at the board, please.","Các em nhìn lên bảng."],
+["Listen carefully.","Lắng nghe cẩn thận."],
+["Read the problem.","Đọc đề bài."],
+["Copy this into your notebook.","Chép bài này vào vở."],
+["Work in pairs.","Làm việc theo cặp."],
+["Work in groups of four.","Làm việc nhóm bốn người."],
+["You have five minutes.","Các em có năm phút."],
+["Come to the board, please.","Mời em lên bảng."],
+["Show your work.","Trình bày lời giải."],
+["Draw a figure.","Vẽ hình."],
+["Write down the formula.","Viết công thức."],
+["Check your answer.","Kiểm tra lại kết quả."],
+["Put your pens down.","Đặt bút xuống."],
+["Hand in your papers.","Nộp bài."],
+["Raise your hand.","Giơ tay lên."]
+],
+"Hỏi – đáp trong giờ Toán": [
+["What is the answer?","Đáp án là gì?"],
+["How did you get that?","Em làm thế nào ra kết quả đó?"],
+["Can you explain why?","Em giải thích tại sao được không?"],
+["Do you agree with him / her?","Em có đồng ý với bạn không?"],
+["Is there another way?","Có cách khác không?"],
+["Any questions?","Có câu hỏi nào không?"],
+["Do you understand?","Các em hiểu chưa?"],
+["Can you repeat, please?","Em nhắc lại được không?"],
+["Which formula do we use?","Ta dùng công thức nào?"],
+["What do we know? What do we need to find?","Đề cho gì? Cần tìm gì?"],
+["Who can solve this?","Ai giải được bài này?"],
+["Let's check together.","Cùng nhau kiểm tra nhé."]
+],
+"Khen ngợi – động viên": [
+["Good job!","Làm tốt lắm!"],
+["Excellent!","Xuất sắc!"],
+["Well done!","Giỏi lắm!"],
+["That's right.","Đúng rồi."],
+["Almost right. Try again.","Gần đúng rồi. Thử lại nhé."],
+["Don't worry, take your time.","Đừng lo, cứ từ từ."],
+["Good try!","Cố gắng tốt lắm!"],
+["Let's give him / her a big hand.","Cả lớp vỗ tay cho bạn nào."]
+],
+"Cách đọc biểu thức – kí hiệu": [
+["x + y: x plus y","x cộng y"],
+["x − y: x minus y","x trừ y"],
+["2x: two x / two times x","2 nhân x"],
+["x ÷ y, x/y: x divided by y / x over y","x chia y"],
+["x = 5: x equals five / x is equal to five","x bằng 5"],
+["x ≠ 2: x is not equal to two","x khác 2"],
+["x > 3: x is greater than three","x lớn hơn 3"],
+["x < 3: x is less than three","x nhỏ hơn 3"],
+["x²: x squared","x bình phương"],
+["x³: x cubed","x lập phương"],
+["xⁿ: x to the power of n","x mũ n"],
+["(a + b)²: a plus b, all squared","(a + b) tất cả bình phương"],
+["√x: the square root of x","căn bậc hai của x"],
+["2/3: two thirds","hai phần ba"],
+["1/2: one half","một phần hai"],
+["−5: negative five / minus five","âm 5"],
+["AB ∥ CD: AB is parallel to CD","AB song song CD"],
+["AB ⊥ CD: AB is perpendicular to CD","AB vuông góc CD"],
+["∠ABC = 90°: angle ABC equals ninety degrees","góc ABC bằng 90 độ"],
+["ΔABC ∽ ΔDEF: triangle ABC is similar to triangle DEF","tam giác ABC đồng dạng tam giác DEF"],
+["AB/CD = 2/3: the ratio of AB to CD is two to three","tỉ số AB và CD là 2 phần 3"],
+["A(2; 3): point A with coordinates two and three","điểm A có tọa độ (2; 3)"]
+],
+"Câu trong đề bài – lời giải": [
+["Calculate …","Tính …"],
+["Find x, given that …","Tìm x, biết rằng …"],
+["Simplify the following expressions.","Rút gọn các biểu thức sau."],
+["Factorize the following polynomials.","Phân tích các đa thức sau thành nhân tử."],
+["Solve the following equations.","Giải các phương trình sau."],
+["Prove that …","Chứng minh rằng …"],
+["Show that the value of the expression does not depend on x.","Chứng tỏ giá trị biểu thức không phụ thuộc vào x."],
+["Let x be …","Gọi x là …"],
+["According to the problem, we have the equation …","Theo đề bài, ta có phương trình …"],
+["Therefore, …","Do đó, …"],
+["So the answer is …","Vậy đáp số là …"],
+["Since AB ∥ CD, we have …","Vì AB ∥ CD nên ta có …"],
+["Substitute x = 2 into the expression.","Thay x = 2 vào biểu thức."],
+["Compare the two results.","So sánh hai kết quả."]
+]
+};
+
+/* ===== LOGIC ===== */
+const $ = s => document.querySelector(s);
+const LS = {get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let favs = new Set(LS.get("tdt8_favs",[]));
+let panel = "words", cat = "Tất cả", q = "";
+
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hl(text){
+  const t = esc(text); if(!q) return t;
+  const nt = norm(text), nq = norm(q.trim()); if(!nq) return t;
+  const i = nt.indexOf(nq); if(i<0) return t;
+  // norm() giữ nguyên độ dài cho chữ tiếng Việt dựng sẵn
+  return esc(text.slice(0,i))+"<mark>"+esc(text.slice(i,i+nq.length))+"</mark>"+esc(text.slice(i+nq.length));
+}
+const META = {
+ "Tất cả":["✨","#4f46e5"],
+ "Đa thức":["🧮","#6366f1"],"Hằng đẳng thức":["⚖️","#8b5cf6"],"Phân thức":["➗","#ec4899"],
+ "Phương trình":["🎯","#ef4444"],"Hàm số & đồ thị":["📈","#0ea5e9"],"Tứ giác":["🔷","#14b8a6"],
+ "Định lí Thalès & tam giác":["📐","#f59e0b"],"Hình chóp":["🔺","#f97316"],"Thống kê & xác suất":["📊","#22c55e"],
+ "Bắt đầu – kết thúc giờ học":["👋","#6366f1"],"Ra yêu cầu – chỉ dẫn":["📋","#0ea5e9"],"Hỏi – đáp trong giờ Toán":["💬","#14b8a6"],
+ "Khen ngợi – động viên":["👏","#f59e0b"],"Cách đọc biểu thức – kí hiệu":["🔤","#8b5cf6"],"Câu trong đề bài – lời giải":["📝","#ef4444"]
+};
+const M = c => META[c] || ["•","#4f46e5"];
+const ICO_COPY = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>';
+const ICO_STAR = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>';
+const actions = (copy,id) => `<button class="act" data-copy="${esc(copy)}" title="Chép">${ICO_COPY}</button><button class="act star ${favs.has(id)?"on":""}" data-fav="${esc(id)}" title="Lưu">${ICO_STAR}</button>`;
+const idW = (c,w)=>"w|"+w[0]+"|"+w[1];
+const idS = (c,s)=>"s|"+s[0];
+
+function chips(){
+  const src = panel==="sents"?SENTS:WORDS;
+  const names = ["Tất cả",...Object.keys(src)];
+  if(!names.includes(cat)) cat="Tất cả";
+  $("#chips").style.display = (panel==="words"||panel==="sents")?"flex":"none";
+  $("#chips").innerHTML = names.map(n=>`<button class="chip ${n===cat?"on":""}" data-c="${esc(n)}"><span class="e">${M(n)[0]}</span>${esc(n)}</button>`).join("");
+}
+function match(arr){ if(!q.trim()) return true; const nq=norm(q.trim()); return arr.some(x=>norm(x).includes(nq)); }
+
+function wordCard(c,w){
+  const id=idW(c,w);
+  return `<div class="card" style="--c:${M(c)[1]}"><div class="row"><div class="en">${hl(w[0])}</div>${actions(w[0],id)}</div>
+  <div class="vi">${hl(w[1])}</div>
+  ${w[2]?`<div class="ex">${hl(w[2])}<div class="v">${hl(w[3]||"")}</div></div>`:""}</div>`;
+}
+function sentCard(c,s){
+  const id=idS(c,s);
+  return `<div class="card sent" style="--c:${M(c)[1]}"><div class="row"><div class="en">${hl(s[0])}</div>${actions(s[0],id)}</div>
+  <div class="vi">${hl(s[1])}</div></div>`;
+}
+function renderList(src, el, countEl, card, unit){
+  let html="", n=0;
+  for(const c of Object.keys(src)){
+    if(cat!=="Tất cả" && c!==cat) continue;
+    const items = src[c].filter(match);
+    if(!items.length) continue;
+    n+=items.length;
+    html += `<div class="group" style="--c:${M(c)[1]}"><span class="gi">${M(c)[0]}</span>${esc(c)}<span class="gn">${items.length}</span></div><div class="list">` + items.map(x=>card(c,x)).join("") + `</div>`;
+  }
+  el.innerHTML = html || `<div class="empty"><div class="big">🔍</div>Không tìm thấy “${esc(q)}”.<br><button class="btn ghost" style="width:auto;padding:10px 18px" data-ask="1">✨ Hỏi AI về từ này</button></div>`;
+  countEl.textContent = n ? `${n} ${unit}` : "";
+}
+function renderFav(){
+  let html="";
+  for(const c in WORDS) for(const w of WORDS[c]) if(favs.has(idW(c,w)) && match(w)) html+=wordCard(c,w);
+  for(const c in SENTS) for(const s of SENTS[c]) if(favs.has(idS(c,s)) && match(s)) html+=sentCard(c,s);
+  $("#favs").innerHTML = html ? `<div class="list" style="margin-top:12px">${html}</div>` : `<div class="empty"><div class="big">⭐</div>Chưa lưu mục nào.<br>Bấm ☆ ở từ hoặc câu để lưu, dùng nhanh khi dạy.</div>`;
+}
+function render(){
+  chips();
+  if(panel==="words") renderList(WORDS,$("#words"),$("#cw"),wordCard,"từ");
+  else if(panel==="sents") renderList(SENTS,$("#sents"),$("#cs"),sentCard,"câu");
+  else if(panel==="fav") renderFav();
+  $("#q").parentElement.style.display = panel==="ai"?"none":"block";
+}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),1400)}
+function go(p){
+  panel=p; document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+  render(); window.scrollTo(0,0);
+}
+
+$("#q").addEventListener("input",e=>{q=e.target.value;$("#clr").style.display=q?"block":"none";render()});
+$("#clr").onclick=()=>{q="";$("#q").value="";$("#clr").style.display="none";render();$("#q").focus()};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.p));
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-c],[data-fav],[data-copy],[data-ask]"); if(!t) return;
+  if(t.dataset.c){cat=t.dataset.c;render();}
+  else if(t.dataset.fav){const id=t.dataset.fav; favs.has(id)?favs.delete(id):favs.add(id); LS.set("tdt8_favs",[...favs]); t.classList.toggle("on"); if(panel==="fav")renderFav(); toast(favs.has(id)?"Đã lưu ★":"Đã bỏ lưu");}
+  else if(t.dataset.copy){const s=t.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>toast("Đã chép"),()=>{const a=document.createElement("textarea");a.value=s;document.body.appendChild(a);a.select();try{document.execCommand("copy");toast("Đã chép")}catch(_){}a.remove()});}
+  else if(t.dataset.ask){$("#aiQ").value=`Dịch sang tiếng Anh (Toán 8): "${q}"`;go("ai");}
+});
+let big=LS.get("tdt8_big",false); document.body.classList.toggle("big",big);
+$("#sizeBtn").onclick=()=>{big=!big;document.body.classList.toggle("big",big);LS.set("tdt8_big",big)};
+// chip bar dính ngay dưới header
+function stick(){ $("#chips").style.top = document.querySelector("header").offsetHeight+"px"; }
+window.addEventListener("resize",stick); stick();
+
+/* ===== GEMINI (tùy chọn) ===== */
+$("#key").value = LS.get("tdt8_key","");
+$("#model").value = LS.get("tdt8_model","gemini-2.5-flash");
+if(!$("#key").value) $("#keyBox").open = true;
+$("#saveKey").onclick=()=>{LS.set("tdt8_key",$("#key").value.trim());LS.set("tdt8_model",$("#model").value.trim()||"gemini-2.5-flash");toast("Đã lưu cài đặt");$("#keyBox").open=false};
+const QUICK=["Cách đọc: (x − 2)(x + 2) = x² − 4","Dịch: Tứ giác có hai cạnh đối song song và bằng nhau là hình bình hành","Câu khen học sinh khi làm đúng bài khó","5 câu hỏi gợi mở khi dạy định lí Pythagore"];
+$("#quick").innerHTML=QUICK.map(s=>`<button>${esc(s)}</button>`).join("");
+$("#quick").onclick=e=>{if(e.target.tagName==="BUTTON")$("#aiQ").value=e.target.textContent};
+
+$("#aiGo").onclick=async()=>{
+  const key=LS.get("tdt8_key",""), model=LS.get("tdt8_model","gemini-2.5-flash"), ask=$("#aiQ").value.trim();
+  if(!ask){toast("Nhập câu hỏi trước");return}
+  if(!key){$("#keyBox").open=true;toast("Cần nhập API key");return}
+  $("#aiOut").style.display="block"; $("#aiAns").textContent="Đang hỏi Gemini…"; $("#aiGo").disabled=true;
+  const sys="Bạn là trợ lý tiếng Anh cho giáo viên Toán lớp 8 ở Việt Nam. Trả lời ngắn gọn, dễ dùng trong lớp, bằng tiếng Việt kèm tiếng Anh. Với từ: nêu từ tiếng Anh, nghĩa, 1 câu ví dụ đơn giản (EN + VI). Với câu: đưa bản dịch tiếng Anh đơn giản, chuẩn thuật ngữ toán, có thể thêm 1 cách nói khác. Không dùng bảng, không dùng LaTeX; viết kí hiệu toán thường (x², √, ∥, ⊥).";
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{
+      method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},
+      body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:[{role:"user",parts:[{text:ask}]}]})
+    });
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error&&j.error.message||("Lỗi "+r.status));
+    const txt=(j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts||[]).map(p=>p.text||"").join("").trim();
+    $("#aiAns").innerHTML = esc(txt||"(Không có câu trả lời)").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/^\s*[\*\-] /gm,"• ");
+  }catch(err){
+    $("#aiAns").textContent="Không gọi được Gemini: "+err.message+"\n\nKiểm tra: có mạng không, API key đúng chưa, tên model còn dùng được không.";
+  }finally{$("#aiGo").disabled=false}
+};
+
+render();
+</script>
+</body>
+</html>
